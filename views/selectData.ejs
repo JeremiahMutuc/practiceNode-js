@@ -11,7 +11,7 @@
     <body>
         <div class="container">
                 <h1>All Inventory Data</h1>
-                <a href="#">Add New Fruit here</a>
+                <a href="http://localhost:1300/forms">Add New Fruit here</a>
                 <table class="table table-stripped">
                     <tr>
                         <th>id</th>
@@ -19,7 +19,7 @@
                         <th>qty</th>
                         <th>amount</th>
                     </tr>
-                    <% fruits.forEach(function(item){ %>
+                    <% inventory.forEach(function(item){ %>
                     <tr>
                         <td><%= item.id %></td>
                         <td><%= item.name %></td>

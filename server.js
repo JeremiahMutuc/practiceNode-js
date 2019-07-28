@@ -1,8 +1,14 @@
 const express = require('express');
 const mysql = require('mysql');
+const bodyParser = require('body-parser');
+
 
 var app = express();
 var router = express.Router();
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 //first route
 app.get('/',function(req, res){
@@ -27,9 +33,21 @@ sqlConnection.connect((err)=>{
       }
 });
 
-//Return inventory in JSON format
+//Return all inventory in JSON format
 app.get('/inventory',function(req, res){
     sqlConnection.query('SELECT*FROM items', function(err, rs){
+        if(!err){
+            res.send(rs);
+        }
+        else{
+            console.log(err);
+        }
+    });
+});
+
+//Return an inventory in JSON format
+app.get('/inventory/:id',function(req, res){
+    sqlConnection.query('SELECT*FROM items WHERE id = ?', [req.params.id], function(err, rs){
         if(!err){
             res.send(rs);
         }
@@ -42,15 +60,34 @@ app.get('/inventory',function(req, res){
 //Get data and show to selectData page
 app.get('/selectData', function(req, res, next){
      sqlConnection.query('SELECT*FROM items', function(err, rs){
-         res.render('selectData.ejs', {fruits: rs});
+         res.render('selectData.ejs', {inventory: rs});
      });
+});
+
+//Render forms.ejs for adding a data
+app.get('/forms', function(req, res, next){
+     res.render('forms.ejs');
+});
+
+//Post data added from forms.ejs
+app.post('/forms', function(req, res, next){
+    sqlConnection.query('INSERT INTO items SET ?', req.body, function(err, rs){
+        
+            if(!err){
+                res.send('All data successfully added... <a href="http://localhost:1300/selectData">see inventory here...</a>');
+            }
+            else{
+                console.log(err);
+            }
+       
+    });
 });
 
 
 
 //listen to port:1300
 app.listen(1300,function(){
-    console.log('Iam listening');
+    console.log('I am listening');
 });
 
 module.exports = router;
