@@ -74,7 +74,7 @@ app.get('/selectData', function(req, res, next){
 
 //Render forms.ejs for adding a data
 app.get('/forms', function(req, res, next){
-     res.render('forms.ejs');
+     res.render('forms.ejs', { inventory : {} });
 });
 
 //Post data added from forms.ejs
@@ -95,6 +95,23 @@ app.post('/forms', function(req, res, next){
 //Delete a specific id row
 app.get('/delete', function(req, res, next){
     sqlConnection.query('DELETE FROM items WHERE id = ?', req.query.id, function(err, rs){
+        res.redirect('/selectData');
+    });
+});
+
+
+
+//Select a specific id row to be updated
+app.get('/update', function(req, res, next){
+    sqlConnection.query('SELECT*FROM items WHERE  id = ?',req.query.id, function(err, rs){
+         res.render('forms.ejs', {inventory : rs[0] });
+    });
+});
+
+
+//Update and post
+app.post('/update', function(req, res, next){
+    sqlConnection.query('UPDATE items SET ? WHERE id = ?', [req.body, req.query.id], function(err, rs){
         res.redirect('/selectData');
     });
 });

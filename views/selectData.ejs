@@ -27,7 +27,8 @@
                         <td><%= item.qty %></td>
                         <td><%= item.amount %></td>
                         <td>
-                            <a href="/delete?id=<%= item.id %>" onClick="return confirm('Are you sure you want to delete?')">DELETE</a>
+                            <a href="/delete?id=<%= item.id %>" style="color:darkred;" onClick="return confirm('Are you sure you want to delete?')">-DELETE-</a>
+                            <a href="/update?id=<%= item.id %>" style="color:green;">-EDIT-</a>
                         </td>
                     </tr>
                     <% }); %>

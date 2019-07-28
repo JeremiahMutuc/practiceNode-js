@@ -12,9 +12,9 @@
         <div class="container">
             <h1>Add new inventory</h1>
             <form method="POST">
-                <div>name = <input type="text" name="name"></div><br>
-                <div>qty = <input type="number" name="qty"/></div><br>
-                <div>amount = <input type="number" name="amount"/></div><br>
+                <div>name = <input type="text" name="name" value="<%= inventory.name %>"/></div><br>
+                <div>qty = <input type="number" name="qty" value="<%= inventory.qty %>"/></div><br>
+                <div>amount = <input type="number" name="amount" value="<%= inventory.amount %>"/></div><br>
                 <div><button style="padding: 13px;">ADD</button></div>
             </form>
         </div>
