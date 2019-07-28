@@ -27,5 +27,30 @@ sqlConnection.connect((err)=>{
       }
 });
 
+//Return inventory in JSON format
+app.get('/inventory',function(req, res){
+    sqlConnection.query('SELECT*FROM items', function(err, rs){
+        if(!err){
+            res.send(rs);
+        }
+        else{
+            console.log(err);
+        }
+    });
+});
+
+//Get data and show to selectData page
+app.get('/selectData', function(req, res, next){
+     sqlConnection.query('SELECT*FROM items', function(err, rs){
+         res.render('selectData.ejs', {fruits: rs});
+     });
+});
+
+
+
 //listen to port:1300
-app.listen(1300);
+app.listen(1300,function(){
+    console.log('Iam listening');
+});
+
+module.exports = router;
