@@ -33,6 +33,8 @@ sqlConnection.connect((err)=>{
       }
 });
 
+
+
 //Return all inventory in JSON format
 app.get('/inventory',function(req, res){
     sqlConnection.query('SELECT*FROM items', function(err, rs){
@@ -44,6 +46,8 @@ app.get('/inventory',function(req, res){
         }
     });
 });
+
+
 
 //Return an inventory in JSON format
 app.get('/inventory/:id',function(req, res){
@@ -57,12 +61,16 @@ app.get('/inventory/:id',function(req, res){
     });
 });
 
+
+
 //Get data and show to selectData page
 app.get('/selectData', function(req, res, next){
      sqlConnection.query('SELECT*FROM items', function(err, rs){
          res.render('selectData.ejs', {inventory: rs});
      });
 });
+
+
 
 //Render forms.ejs for adding a data
 app.get('/forms', function(req, res, next){
@@ -80,6 +88,14 @@ app.post('/forms', function(req, res, next){
                 console.log(err);
             }
        
+    });
+});
+
+
+//Delete a specific id row
+app.get('/delete', function(req, res, next){
+    sqlConnection.query('DELETE FROM items WHERE id = ?', req.query.id, function(err, rs){
+        res.redirect('/selectData');
     });
 });
 
