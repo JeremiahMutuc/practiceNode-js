@@ -20,7 +20,8 @@ var sqlConnection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'blank',
-    database: 'inventory'
+    database: 'inventory',
+    multipleStatements: true
 });
 
 //Connecting to mysql
@@ -67,6 +68,20 @@ app.delete('/inventory/:id',function(req, res){
     sqlConnection.query('DELETE FROM items WHERE id = ?', [req.params.id], function(err, rs){
         if(!err){
             res.send('Deleted Successfully');
+        }
+        else{
+            console.log(err);
+        }
+    });
+});
+
+
+//Post an inventory in JSON format using Postman
+app.post('/inventory',function(req, res){
+    var sql = 'SET @id = ?;SET @name = ?;SET @qty = ?;SET @amount = ?;CALL inventoryAddorUpdate(@id,@name,@qty,@amount);'; 
+    sqlConnection.query(sql, [req.body.id, req.body.name, req.body.qty, req.body.amount], function(err, rs){
+        if(!err){
+            res.send(rs);
         }
         else{
             console.log(err);
