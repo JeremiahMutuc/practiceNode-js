@@ -49,7 +49,7 @@ app.get('/inventory',function(req, res){
 
 
 
-//Return an inventory in JSON format
+//Get an inventory in JSON format
 app.get('/inventory/:id',function(req, res){
     sqlConnection.query('SELECT*FROM items WHERE id = ?', [req.params.id], function(err, rs){
         if(!err){
@@ -60,6 +60,21 @@ app.get('/inventory/:id',function(req, res){
         }
     });
 });
+
+
+//Delete an inventory in JSON format using Postman
+app.delete('/inventory/:id',function(req, res){
+    sqlConnection.query('DELETE FROM items WHERE id = ?', [req.params.id], function(err, rs){
+        if(!err){
+            res.send('Deleted Successfully');
+        }
+        else{
+            console.log(err);
+        }
+    });
+});
+
+
 
 
 
@@ -115,6 +130,8 @@ app.post('/update', function(req, res, next){
         res.redirect('/selectData');
     });
 });
+
+
 
 
 
