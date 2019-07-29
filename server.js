@@ -90,11 +90,25 @@ app.post('/inventory',function(req, res){
 });
 
 
+//Put an inventory in JSON format using Postman
+app.put('/inventory',function(req, res){
+    var sql = 'SET @id = ?;SET @name = ?;SET @qty = ?;SET @amount = ?;CALL inventoryAddorUpdate(@id,@name,@qty,@amount);'; 
+    sqlConnection.query(sql, [req.body.id, req.body.name, req.body.qty, req.body.amount], function(err, rs){
+        if(!err){
+            res.send('Updated Successfully');
+        }
+        else{
+            console.log(err);
+        }
+    });
+});
+
+
 
 
 
 //Get data and show to selectData page
-app.get('/selectData', function(req, res, next){
+app.get('/selectData', function(req, res){
      sqlConnection.query('SELECT*FROM items', function(err, rs){
          res.render('selectData.ejs', {inventory: rs});
      });
@@ -103,16 +117,16 @@ app.get('/selectData', function(req, res, next){
 
 
 //Render forms.ejs for adding a data
-app.get('/forms', function(req, res, next){
+app.get('/forms', function(req, res){
      res.render('forms.ejs', { inventory : {} });
 });
 
 //Post data added from forms.ejs
-app.post('/forms', function(req, res, next){
+app.post('/forms', function(req, res){
     sqlConnection.query('INSERT INTO items SET ?', req.body, function(err, rs){
         
             if(!err){
-                res.send('All data successfully added... <a href="http://localhost:1300/selectData">see inventory here...</a>');
+                res.redirect('/selectData');
             }
             else{
                 console.log(err);
@@ -123,7 +137,7 @@ app.post('/forms', function(req, res, next){
 
 
 //Delete a specific id row
-app.get('/delete', function(req, res, next){
+app.get('/delete', function(req, res){
     sqlConnection.query('DELETE FROM items WHERE id = ?', req.query.id, function(err, rs){
         res.redirect('/selectData');
     });
@@ -132,7 +146,7 @@ app.get('/delete', function(req, res, next){
 
 
 //Select a specific id row to be updated
-app.get('/update', function(req, res, next){
+app.get('/update', function(req, res){
     sqlConnection.query('SELECT*FROM items WHERE  id = ?',req.query.id, function(err, rs){
          res.render('forms.ejs', {inventory : rs[0] });
     });
@@ -140,7 +154,7 @@ app.get('/update', function(req, res, next){
 
 
 //Update and post
-app.post('/update', function(req, res, next){
+app.post('/update', function(req, res){
     sqlConnection.query('UPDATE items SET ? WHERE id = ?', [req.body, req.query.id], function(err, rs){
         res.redirect('/selectData');
     });
